@@ -5,7 +5,9 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "cli": "yarn ts-node -T src/cli.ts"
+    "test": "yarn jest src/**",
+    "dev:cli": "ts-node -T src/cli.ts",
+    "cli": "node dist/cli.js"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
