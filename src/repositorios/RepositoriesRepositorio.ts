@@ -15,15 +15,26 @@ export class RepositoriesRepositorio extends AbstractRepositorio<Repository> {
     return RepositoriesRepositorio.instance;
   }
 
-  async findByFullName(full_name: string): Promise<Repository | undefined> {
-    for (const repository of this.database.values()) {
-      if (
-        repository
+  async findByName(
+    name: string,
+    opts?: { limit: number; offset?: number }
+  ): Promise<Array<Repository>> {
+    let skipCount = 0;
+
+    return Array.from(this.database.values()).reduce(
+      (acc: Array<Repository>, repository) => {
+        if (opts?.limit && acc.length >= opts.limit) return acc;
+
+        const match = repository
           .get("name_with_owner")
           .toLowerCase()
-          .includes(full_name.toLowerCase())
-      )
-        return repository;
-    }
+          .includes(name.toLowerCase());
+
+        if (match && opts?.offset && skipCount++ < opts.offset) return acc;
+
+        return match ? [...acc, repository] : acc;
+      },
+      []
+    );
   }
 }

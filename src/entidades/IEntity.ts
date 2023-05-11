@@ -13,5 +13,9 @@ export default abstract class IEntity<EntityProps = any> {
     this._props = Object.assign({}, this._props, props);
   }
 
+  get props() {
+    return this._props;
+  }
+
   abstract getEntityID(): string;
 }
